@@ -1,0 +1,35 @@
+name: SpaceLampJail
+version: ${project.version}
+main: com.aidanmurphey.spacelampjail.SpaceLampJail
+api-version: 1.13
+prefix: SL-Jail
+authors: [Aidan]
+description: Jail those kids
+website: https://aidanmurphey.com
+
+commands:
+  jail:
+    description: Jail a fool
+    permission: sljail.jail
+  unjail:
+    description: Don't be lenient on these fools
+    permission: sljail.unjail
+  setjail:
+    description: Set a location to store some fools
+    permission: sljail.setjail
+
+permissions:
+  sljail.*:
+    children:
+      sljail.jail: true
+      sljail.unjail: true
+      sljail.setjail: true
+  sljail.jail:
+    description: Gives access to /jail
+    default: op
+  sljail.unjail:
+    description: Gives access to /unjail
+    default: op
+  sljail.setjail:
+    description: Gives access to /setjail
+    default: op

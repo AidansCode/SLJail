@@ -1,0 +1,6 @@
+messagePrefix: '&4[SpaceLampJail]'
+jailedMessage: '&6%ADMIN% has jailed you for %DURATION% seconds!'
+adminJailedMessage: '&6You have successfully jailed %INMATE% for %DURATION% seconds'
+unjailMessage: '&6Your time is up, come on out pal.'
+
+jail:
