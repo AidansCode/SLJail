@@ -4,3 +4,5 @@ adminJailedMessage: '&6You have successfully jailed %INMATE% for %DURATION% seco
 unjailMessage: '&6Your time is up, come on out pal.'
 
 jail:
+
+jailedPlayers:

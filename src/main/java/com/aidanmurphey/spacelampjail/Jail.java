@@ -2,6 +2,7 @@ package com.aidanmurphey.spacelampjail;
 
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
@@ -46,6 +47,30 @@ public class Jail {
 	private Jail() {
 		this.jailLocation = getJailLocationFromConfig();
 		this.inmates = new ArrayList<>(2);
+
+		FileConfiguration fileConfiguration = SpaceLampJail.getPlugin().getConfig();
+		if (fileConfiguration.isConfigurationSection("jailedPlayers")) {
+			ConfigurationSection configurationSection = fileConfiguration.getConfigurationSection("jailedPlayers");
+			for (String key : configurationSection.getKeys(false)) {
+				UUID uuid = UUID.fromString(key);
+				String worldName = configurationSection.getString(key + ".world");
+				double x = configurationSection.getDouble(key + ".x"),
+					y = configurationSection.getDouble(key + ".y"),
+					z = configurationSection.getDouble(key + ".z");
+				float yaw = (float) configurationSection.getDouble(key + ".yaw"),
+					pitch = (float) configurationSection.getDouble(key + ".pitch");
+				Location l = new Location(SpaceLampJail.getPlugin().getServer().getWorld(worldName), x, y, z, yaw, pitch);
+
+				long inTime = configurationSection.getLong(key + ".inTime");
+				int foodLevel = configurationSection.getInt(key + ".foodLevel");
+				float saturation = (float) configurationSection.getDouble(key + ".saturation");
+				double health = configurationSection.getDouble(key + ".health");
+				long duration = configurationSection.getLong(key + ".duration");
+
+				Inmate inmate = new Inmate(uuid, l, inTime, foodLevel, saturation, health, duration);
+				inmates.add(inmate);
+			}
+		}
 	}
 
 	public boolean isJailSet() {
@@ -81,6 +106,7 @@ public class Jail {
 
 		Inmate inmate = new Inmate(p, duration);
 		inmates.add(inmate);
+		inmate.heal();
 		p.teleport(getLocation());
 
 		return true;
@@ -103,6 +129,10 @@ public class Jail {
 		Inmate inmate = inmates.stream().filter(curInmate -> curInmate.getUuid().equals(uuid)).findAny().orElse(null);
 
 		return inmate;
+	}
+
+	public ArrayList<Inmate> getInmates() {
+		return inmates;
 	}
 
 	private Location getJailLocationFromConfig() {

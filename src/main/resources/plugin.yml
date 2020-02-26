@@ -17,6 +17,9 @@ commands:
   setjail:
     description: Set a location to store some fools
     permission: sljail.setjail
+  jailtime:
+    description: Shows you how much longer you're in jail
+    permission: sljail.time
 
 permissions:
   sljail.*:
@@ -24,6 +27,7 @@ permissions:
       sljail.jail: true
       sljail.unjail: true
       sljail.setjail: true
+      sljail.time: true
   sljail.jail:
     description: Gives access to /jail
     default: op
@@ -33,3 +37,6 @@ permissions:
   sljail.setjail:
     description: Gives access to /setjail
     default: op
+  sljail.time:
+    description: Gives access to /jailtime
+    default: true

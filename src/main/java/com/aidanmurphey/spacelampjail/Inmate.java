@@ -38,7 +38,30 @@ public class Inmate {
 					Jail.getInstance().unjailPlayer(p);
 			}
 		}.runTaskLater(SpaceLampJail.getPlugin(), duration * 20);
+	}
 
+	public Inmate(UUID uuid, Location l, long inTime, int foodLevel, float saturation, double health, long duration) {
+		this.uuid = uuid;
+		this.location = l;
+		this.inTime = inTime;
+		this.foodLevel = foodLevel;
+		this.saturation = saturation;
+		this.health = health;
+		this.duration = duration;
+
+		long now = (new Date()).getTime() / 1000;
+		long delta = inTime + duration - now;
+
+		if (delta > 0) {
+			this.task = new BukkitRunnable() {
+				@Override
+				public void run() {
+					Player p = SpaceLampJail.getPlugin().getServer().getOfflinePlayer(uuid).getPlayer();
+					if (p != null)
+						Jail.getInstance().unjailPlayer(p);
+				}
+			}.runTaskLater(SpaceLampJail.getPlugin(), delta * 20);
+		}
 	}
 
 	public UUID getUuid() {
@@ -91,7 +114,7 @@ public class Inmate {
 	}
 
 	public boolean release() {
-		task.cancel();
+		if (task != null) task.cancel();
 		if (!isPlayerOnline()) return false;
 
 		Player p = getOfflinePlayer().getPlayer();
